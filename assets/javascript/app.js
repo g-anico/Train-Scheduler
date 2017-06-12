@@ -22,8 +22,8 @@ $('#add-train').on('click', function() {
   var firstTraintime = $("#firstTrain-input").val().trim();
   var frequency = $("#frequency-input").val().trim();
 
+//when retrieving the "first train" data, make sure to parse it into a Unix timestamp- why?
 
-  // *** when retrieving the "first train" data, make sure to parse it into a Unix timestamp
   var convertTime = moment(firstTraintime, "HH:mm").format("hh:mm A");
 
   //*console logging the input values
@@ -35,13 +35,12 @@ $('#add-train').on('click', function() {
 
   debugger
 
-  //code for the push: `push` that data into firebase (assume that the `child_added` listener updates HTML)
+  //code to `push` that data into firebase (assume that the `child_added` listener updates HTML)
   database.ref().push({
     trainName: trainName,
     destination: destination,
     firstTraintime: firstTraintime,
     frequency: frequency,
-    // timestamp: firebase.database.ServerValue.TIMESTAMP
    });
 
   // alert that train was added
@@ -73,6 +72,7 @@ database.ref().on('child_added', function(childSnapshot) {
   console.log(pastTime)
   //current date and time using moment.js
   var currentTime = moment();
+// THEN DO THIS MATH
 // 1. compute the difference in time from 'now' and the first train, store in var
   var elapsedTime = moment().diff(moment(pastTime),"minutes");
   console.log(elapsedTime);
@@ -88,24 +88,8 @@ database.ref().on('child_added', function(childSnapshot) {
    $("#train-table").append(
      "<tr><td>" + trainName + "</td>"
      +"<td>" + destination + "</td>"
-     +"<td>" + firstTraintime + "</td>"
      +"<td>" + frequency + "</td>"
      +"<td>" + nextArrival + "</td>"
      +"<td>" + minutesAway + "</td></tr>"
    );
   });
-
-
-
-// FIRST MAKE THE table row show up with empty strings for `timeInMinutes` / `tArrival `
-
-// THEN DO THIS MATH
-        // 1. compute the difference in time from 'now' and the first train, store in var//done
-        // 2. get the remainder of time after using `mod` with the frequency, store in var//done
-        // 3. subtract the remainder from the frequency, store in var `timeInMinutes`//done
-        // 4. format `timeInMinutes` ()"make pretty") and store in var `tArrival`//done
-
-// ITS OKAY TO JUST SHOW EMPTY STRINGS for `timeInMinutes` / `tArrival`
-
-
-// });
